@@ -1,0 +1,13 @@
+.heading {
+  font-family: 'Righteous', cursive;
+  font-size: 30px;
+  color: red;
+  background-color: black;
+  left : 505px;
+}
+
+.playGame {
+  color: red;
+  background-color: black;
+  left : 425px;
+}
