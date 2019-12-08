@@ -1,12 +1,13 @@
 (
-  document.onreadystatechange = () => {
+  document.onreadystatechange = (): void => {
     if (document.readyState === 'complete') {
       const model = {
 
       };
       const startView = {
         init: (): void => {
-
+          const playGameButton = document.getElementsByClassName(
+              'playGame') as HTMLCollectionOf<HTMLButtonElement>;
         },
       };
       const gameView = {

@@ -3,11 +3,23 @@
   font-size: 30px;
   color: red;
   background-color: black;
-  left : 505px;
+  left : 537px;
 }
 
 .playGame {
   color: red;
   background-color: black;
-  left : 425px;
+  left : 445px;
+  top: 30px;
+}
+
+.instructions {
+  color: crimson;
+}
+
+.bird {
+  justify-content: center;
+}
+.is-horizontal-center {
+  justify-content: center;
 }
