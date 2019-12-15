@@ -18,13 +18,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="application-name" content="&nbsp;"/>
-    <meta name="msapplication-TileColor" content="#FFFFFF" />
-    <meta name="msapplication-TileImage" content="mstile-144x144.png" />
-    <meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
-    <meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
-    <meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
-    <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
     <title>
       Flappy Bird by Nishanth Arcot
     </title>
@@ -36,37 +29,51 @@
       aria-label="main navigation"
     >
       <div class="navbar-brand heading has-text-centered">
-        <a class="navbar-item is-size-3 heading" href="/">
+        <a class="navbar-item is-size-3 heading">
           Flappy Bird
         </a>
       </div>
     </nav>
+    <div class="game-images">
+      <a href="#">
+        <img class="sampleImage" src="./assets/images/obstacle.jpg" alt="Image" disabled>
+      </a>
+    </div>
     <section class="hero is-dark is-fullheight">
       <div class="hero-body">
         <div class="container">
-          <div class='card-content is-flex is-horizontal-center'>
-            <img
-              src="./assets/images/flappybird.gif"
-              alt="flappybird"
-              width="200"
-              class="bird"
-            >
-          </div>
-          <h2 class="is-size-1 has-text-centered instructions">
-            Instructions
-            <ul class="is-size-3">
-              <li>
-                Use Space bar or Mouse Click to jump
-              </li>
-              <li>
-                Try to collect as many coins as possible
-              </li>
-            </ul>
-          </h2>
-          <div class="has-text-centered playGame">
-            <a class="button is-danger is-size-2 playGame" href="./game.html">
-              Play Game
-            </a>
+          <div class="columns">
+            <div class="column has-text-centered">
+              <div id="gamebox">
+                <div class="slide" row="0">
+                  <canvas width="20vmin" height="20vmin"></canvas>
+                </div>
+                <div class="slide" row="1">
+                  <canvas width="20vmin" height="20vmin"></canvas>
+                </div>
+                <div class="slide" row="2">
+                  <canvas width="20vmin" height="20vmin"></canvas>
+                </div>
+                <div class="slide" row="3">
+                  <canvas width="20vmin" height="20vmin"></canvas>
+                </div>
+                <div class="slide" row="4">
+                  <canvas width="20vmin" height="20vmin"></canvas>
+                </div>
+                <div class="slide" row="5">
+                  <canvas width="20vmin" height="20vmin"></canvas>
+                </div>
+                <div class="slide" row="6">
+                  <canvas width="20vmin" height="20vmin"></canvas>
+                </div>
+                <div class="slide" row="7">
+                  <canvas width="20vmin" height="20vmin"></canvas>
+                </div>
+                <div class="slide" row="8">
+                  <canvas width="20vmin" height="20vmin"></canvas>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -74,6 +81,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="game.css">
+    <script src="app.js"></script>
   </body>
 </html>

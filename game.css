@@ -1,0 +1,63 @@
+.gamebox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vmin;
+  width: 100vw;
+  border: 1px black solid;
+  background-image: url(./assets/images/background.png);
+  background-size: 100% 100%;
+}
+
+
+.heading {
+  font-family: 'Righteous', cursive;
+  color: red;
+  background-color: black;
+  justify-content: center;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 1vmin;
+}
+
+
+.obstacle2 {
+  height: 70vh;
+  width: 60vw;
+}
+
+.obstacle1 {
+  height: 70vh;
+  width: 60vw;
+}
+
+#player {
+  height: 10vmin;
+  width: 10vmin;
+  /* right: -20vw; */
+}
+
+.coin {
+  position: relative;
+  right: 30vw;
+}
+
+.gameStatus {
+  position: relative;
+  background-color: red;
+  right: 35vw;
+  top: 5vh;
+}
+
+.score {
+  font-family: 'Permanent Marker', cursive;
+  top: 5vh;
+  background-color: red;
+}
+
+.obstacles {
+  right: 100vw;
+}
