@@ -46,9 +46,6 @@
   border: 3px solid brown;
 }
 
-.container {
-  /* border: 1px solid brown; */
-}
 
 .column1 {
   display: flex;
