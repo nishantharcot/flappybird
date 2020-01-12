@@ -1,63 +1,93 @@
 .gamebox {
   display: flex;
   align-items: center;
-  justify-content: center;
   height: 100vmin;
   width: 100vw;
-  border: 1px black solid;
   background-image: url(./assets/images/background.png);
   background-size: 100% 100%;
 }
 
-
-.heading {
-  font-family: 'Righteous', cursive;
-  color: red;
-  background-color: black;
+#top {
+  display: flex;
+  flex-direction: row;
   justify-content: center;
+  /* padding: 1vh; */
 }
 
-.column {
-  float: left;
-  width: 33.33%;
-  padding: 1vmin;
+#volume {
+  color: greenyellow;
 }
 
-
-.obstacle2 {
-  height: 70vh;
-  width: 60vw;
+#gameOver {
+  color: orange;
+  font-family: 'Luckiest Guy', cursive;
 }
 
-.obstacle1 {
-  height: 70vh;
-  width: 60vw;
+#scoreBox {
+  color: orange;
+  font-family: 'Luckiest Guy', cursive;
 }
 
-#player {
-  height: 10vmin;
-  width: 10vmin;
-  /* right: -20vw; */
+.restart {
+  color: greenyellow;
 }
 
-.coin {
+.backtoMM {
   position: relative;
-  right: 30vw;
+  color: greenyellow;
+  left: -1vw;
 }
 
-.gameStatus {
-  position: relative;
-  background-color: red;
-  right: 35vw;
-  top: 5vh;
+.endview {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: space-around;
+  border: 3px solid brown;
 }
 
-.score {
-  font-family: 'Permanent Marker', cursive;
-  top: 5vh;
-  background-color: red;
+.container {
+  /* border: 1px solid brown; */
+}
+
+.column1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: red;
+}
+
+#gamePause {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#getReady {
+  color: green;
+  font-family: 'Luckiest Guy', cursive;
+}
+
+.columns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .obstacles {
-  right: 100vw;
+  height: 35vh;
+  width: 25vw;
+}
+
+#player {
+  height: 3vmin;
+  width: 3vmin;
+}
+
+.navbar-item {
+  color: red !important;
+}
+
+.score {
+  font-family: 'Dancing Script', cursive;
 }

@@ -2,9 +2,11 @@
 <html lang="en">
   <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Permanent+Marker&display=swap" rel="stylesheet">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script&display=swap" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.0/js/all.js"></script>
     <link rel="stylesheet" href="game.css">
     <script src="app.js"></script>
     <link rel="icon" href="./assets/images/favicons/favicon.ico" type="image/x-icon">
@@ -34,29 +36,110 @@
         <header class="navbar">
           <div class="container">
             <div class="navbar-brand">
-              <p class="navbar-item gameStatus">
-                <i class="fas fa-pause"></i>
-              </p>
-              <p class="navbar-item is-size-3 score">
+              <div class="navbar-item is-size-2 score">
                 
-              </p>
+              </div>
             </div>
           </div>
         </header>
       </div>
       <div class="hero-body">
-        <div class="container">
-          <div class="row">
-            <div class="column">
-              <img id="player" src="./assets/images/frame-4.png" alt="" style="position: relative; top: 20vh; right: -20vw;">
+        <div class="modal gameViewModal">
+          <div class="modal-background"></div>
+          <div class="modal-content">
+            <div id="gamePause">
+              <div>
+                <button id="resume">
+                  <i class="fas is-size-1 restart fa-play"></i>
+                </button>
+              </div>
+              <div>
+                <button id="volume">
+                  <i class="fas is-size-1 sound fa-volume-up"></i>
+                </button>
+              </div>
             </div>
-            <div class="obstacles">
-              <div class="column">
-                <img class="obstacle1" src="./assets/images/test.png" alt="" style="position: relative; right: 0vw; top: 0vh">
+          </div>
+        </div>
+        <div class="modal endviewModal">
+          <div class="modal-background"></div>
+          <div class="modal-content endview has-text-centered">
+            <div id="top">
+              <div>
+                <a href="./index.html" class="backtoMM">
+                  <i class="fas is-size-1 fa-long-arrow-alt-left"></i>
+                </a>
               </div>
-              <div class="column">
-                <img class="obstacle2" src="./assets/images/test.png" alt="" style="position: relative; right: 0vw; top:0vh">
+              <div id="gameOver" class="is-size-1">
+                GameOver
               </div>
+            </div>
+            <div id="scoreBox">
+              <div class="is-size-1" id="finalScore">
+                <!-- SCORE:- -->
+              </div>
+              <div class="is-size-1" id="bestScore">
+                <!-- BEST:- -->
+              </div>
+            </div>
+            <div class="is-size-1">
+              <a href="./game.html">
+                <i class="fas restart fa-play"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="columns">
+            <div class="column column1 is-one-third">
+              <div id="getReady" class="is-size-1">
+                Get Ready!
+              </div>
+              <div>
+                <img
+                  id="player"
+                  src="./assets/images/frame-4.png"
+                  alt=""
+                  style="position: relative; right: 0vw; top: 0vh"
+                >
+              </div>
+              <div id="arrows">
+                <i class="fas is-size-3 startIcon fa-long-arrow-alt-right"></i>
+                <i class="fas startIcon fa-hand-point-up"></i>
+                <i class="fas is-size-3 startIcon fa-long-arrow-alt-left"></i>
+              </div>
+            </div>
+            <div class="column is-one-third gameView">
+              <img
+                id="obstacle1Up"
+                class="obstacles"
+                src="./assets/images/Up.png"
+                alt=""
+                style="position: relative; right: 0vw; top: 0vh"
+              >
+              <img
+                id="obstacle1Down"
+                class="obstacles"
+                src="./assets/images/Down.png"
+                alt=""
+                style="position: relative; right: 0vw; top: 0vh"
+              >
+            </div>
+            <div class="column is-one-third gameView">
+              <img
+                id="obstacle2Up"
+                class="obstacles"
+                src="./assets/images/Up.png"
+                alt=""
+                style="position: relative; right: 0vw; top: 0vh"
+              >
+              <img
+                id="obstacle2Down"
+                class="obstacles"
+                src="./assets/images/Down.png"
+                alt=""
+                style="position: relative; right: 0vw; top: 0vh"
+              >
             </div>
           </div>
         </div>

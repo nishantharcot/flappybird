@@ -3,127 +3,285 @@
     if (document.readyState === 'complete') {
       const Hero = document.getElementById(
           'player') as HTMLImageElement;
-      const obstacle1 = document.getElementsByClassName(
-          'obstacle1')[0] as HTMLImageElement;
-      const obstacle2 = document.getElementsByClassName(
-          'obstacle2')[0] as HTMLImageElement;
-      const gameStatus = document.getElementsByClassName(
-          'gameStatus')[0] as HTMLParagraphElement;
-      gameStatus.innerHTML = '<i class="fas fa-pause gameStatus"></i>';
+      const obstacle1Up = document.getElementById(
+          'obstacle1Up') as HTMLImageElement;
+      const obstacle1Down = document.getElementById(
+          'obstacle1Down') as HTMLImageElement;
+      const obstacle2Up = document.getElementById(
+          'obstacle2Up') as HTMLImageElement;
+      const obstacle2Down = document.getElementById(
+          'obstacle2Down') as HTMLImageElement;
       const gameScore = document.getElementsByClassName(
           'score')[0] as HTMLParagraphElement;
       gameScore.innerHTML = String(0);
+      const getReady = document.getElementById('getReady') as HTMLDivElement;
+      const arrows = document.getElementById('arrows') as HTMLDivElement;
       const jumpSound = new Audio('./assets/sounds/jump.wav');
       const scoreSound = new Audio('./assets/sounds/score.wav');
       const hitgroundSound = new Audio('./assets/sounds/hitGround.wav');
       const model = {
-        velocity: 0,
+        playSound: true,
+        gravityPresent: false,
+        obstacleMovement: false,
+        playerMovement: true,
+        best: 0,
+        gravity: 0.001,
+        flapping: -3.5,
+        viewStatus: 0,
+        dY: 0,
         pause: true,
         score: 0,
+        screenTop: -38,
+        Ground: 28,
+        birdJumpYaxis: 3,
+        obstacle1Startingpoint: 26,
+        obstacle1Endingpoint: 31.5,
+        obstacle2Startingpoint: 56,
+        obstacle2Endingpoint: 61.5,
+        heroObstacle1Startingpoint: 26.5,
+        heroObstacle1Endingpoint: 26.6,
+        heroObstacle2Startingpoint: 56.5,
+        heroObstacle2Endingpoint: 56.65,
+        Obstacle1UpBottom: -11.5,
+        Obstacle1DownTop: 3.5,
+        Obstacle2UpBottom: -11.5,
+        Obstacle2DownTop: 3.5,
+        obstacle1ScreenleavingPoint: 48,
+        obstacle2ScreenleavingPoint: 78,
       };
       const startView = {
         init: (): void => {
-          // Nothing
+          obstacle1Up.style.visibility = 'hidden';
+          obstacle2Up.style.visibility = 'hidden';
+          obstacle1Down.style.visibility = 'hidden';
+          obstacle2Down.style.visibility = 'hidden';
         },
       };
       const gameView = {
         init: (): void => {
-          // Nothing
+          if (model.viewStatus === 0) {
+            document.onmouseup = (): void => {
+              if (model.viewStatus === 0) {
+                model.viewStatus = 1;
+                model.pause = false;
+                model.gravityPresent = true;
+                model.obstacleMovement = true;
+                Hero.style.top = 0 + 'vh';
+                getReady.style.visibility = 'hidden';
+                arrows.style.visibility = 'hidden';
+                obstacle1Up.style.visibility = 'visible';
+                obstacle2Up.style.visibility = 'visible';
+                obstacle1Down.style.visibility = 'visible';
+                obstacle2Down.style.visibility = 'visible';
+              }
+            };
+          }
+          // P
+          const gameViewModal = document.getElementsByClassName(
+              'gameViewModal')[0] as HTMLDivElement;
+          const resume = document.getElementById('resume') as HTMLButtonElement;
+          const volume = document.getElementById('volume') as HTMLButtonElement;
+          const soundClass = document.getElementsByClassName(
+              'sound')[0] as HTMLIFrameElement;
+          volume.onclick = (): void => {
+            if (soundClass.classList.contains('fa-volume-mute')) {
+              model.playSound = true;
+              volume.innerHTML =
+                '<i class="fas is-size-1 sound fa-volume-up"></i>';
+              soundClass.classList.remove('fa-volume-mute');
+              soundClass.classList.add('fa-volume-up');
+            } else {
+              model.playSound = false;
+              volume.innerHTML =
+                '<i class="fas is-size-1 sound fa-volume-mute"></i>';
+              soundClass.classList.remove('fa-volume-up');
+              soundClass.classList.add('fa-volume-mute');
+            }
+          };
+          resume.onclick = (): void => {
+            model.pause = false;
+            gameViewModal.classList.remove('is-active');
+          };
+          document.onkeyup = (e): void => {
+            if (e.keyCode === 80) {
+              model.pause = true;
+              gameViewModal.classList.add('is-active');
+            }
+          };
         },
       };
       const endView = {
         init: (): void => {
-          // Nothing
+          if (model.pause === true) {
+            const endviewModal = document.getElementsByClassName(
+                'endviewModal')[0] as HTMLDivElement;
+            endviewModal.classList.add('is-active');
+            const finalScore = document.getElementById(
+                'finalScore') as HTMLDivElement;
+            const bestScore = document.getElementById(
+                'bestScore') as HTMLDivElement;
+            finalScore.innerHTML = `SCORE:- ${model.score}`;
+            if (model.best < model.score) {
+              model.best = model.score;
+            }
+            bestScore.innerHTML = `BEST:- ${model.best}`;
+          }
         },
       };
       const controller = {
         init: (): void => {
           startView.init();
           gameView.init();
-          endView.init();
-          setInterval(controller.move, 9);
-          setInterval(controller.gravity, 10);
+          // computational waste
+          setInterval(controller.oscillate, 200);
+          setInterval(controller.move, 10);
+          setInterval(controller.gravity, 1);
+        },
+        oscillate: (): void => {
+          if (model.viewStatus === 0) {
+            const currentElevation = Number(Hero.style.top.slice(0, -2));
+            if (currentElevation >= -1) {
+              Hero.src = './assets/images/frame-4.png';
+              Hero.style.top = Number(currentElevation) -
+                2 + 'vh';
+            }
+            if (currentElevation <= +1) {
+              Hero.style.top = Number(currentElevation) +
+                2 + 'vh';
+            }
+          }
+        },
+        sideMovement: (): void => {
+          if (model.pause === false) {
+            const currentRight = Number(Hero.style.right.slice(0, -2));
+            Hero.style.right = currentRight - 0.001 + 'vw';
+          }
+        },
+        obstacleCollision: (): void => {
+          Hero.style.right = 5 + 'vw';
+          model.obstacleMovement = false;
+          model.playerMovement = false;
+          setInterval(controller.sideMovement, 1);
+          setInterval(controller.gravity, 1);
         },
         jump: (): void => {
           const currentElevation = Number(Hero.style.top.slice(0, -2));
-          model.velocity = 0;
           Hero.src = './assets/images/frame-4.png';
-          if (currentElevation >= -15) {
-            Hero.style.top = Number(currentElevation) - 5 + 'vh';
+          model.dY += model.flapping;
+          if (currentElevation >= model.screenTop) {
+            Hero.style.top = Number(currentElevation) +
+              model.dY + 'vh';
           }
+          model.dY = 0;
         },
         move: (): void => {
-          if (model.pause === false) {
-            const current1 = Number(obstacle1.style.right.slice(0, -2));
-            const current2 = Number(obstacle2.style.right.slice(0, -2));
+          if (model.pause === false && model.obstacleMovement === true) {
+            const obstacle1UpPosition =
+              Number(obstacle1Up.style.right.slice(0, -2));
+            const obstacle2UpPosition =
+              Number(obstacle2Up.style.right.slice(0, -2));
 
-            if (current1 >= 23 && current1 <= 23.05) {
+            const currentElevation = Number(Hero.style.top.slice(0, -2));
+            if (obstacle1UpPosition >= model.obstacle1Startingpoint &&
+                obstacle1UpPosition <= model.obstacle1Endingpoint) {
+              if (currentElevation >= model.Obstacle1DownTop ||
+                currentElevation <= model.Obstacle1UpBottom) {
+                controller.obstacleCollision();
+              }
+            }
+            if (obstacle2UpPosition >= model.obstacle2Startingpoint &&
+              obstacle2UpPosition <= model.obstacle2Endingpoint) {
+              if (currentElevation >= model.Obstacle2DownTop ||
+                currentElevation <= model.Obstacle2UpBottom) {
+                controller.obstacleCollision();
+              }
+            }
+            if (obstacle1UpPosition >= model.heroObstacle1Startingpoint &&
+              obstacle1UpPosition <= model.heroObstacle1Endingpoint) {
               model.score += 1;
               gameScore.innerHTML = String(model.score);
-              scoreSound.play();
+              if (model.playSound === true) {
+                scoreSound.play();
+              }
             }
-            if (current2 > 54 && current2 <= 54.1) {
+            if (obstacle2UpPosition > model.heroObstacle2Startingpoint &&
+              obstacle2UpPosition <= model.heroObstacle2Endingpoint) {
               model.score += 1;
               gameScore.innerHTML = String(model.score);
-              scoreSound.play();
+              if (model.playSound === true) {
+                scoreSound.play();
+              }
             }
-            if (current1 < 48) {
-              obstacle1.style.right = current1 + 0.1 + 'vw';
+            const heightVariationObstacle1 = Math.floor(Math.random()*100) % 20;
+            if (obstacle1UpPosition < model.obstacle1ScreenleavingPoint) {
+              obstacle1Up.style.right = obstacle1UpPosition + 0.111 + 'vw';
+              obstacle1Down.style.right = obstacle1UpPosition + 0.111 + 'vw';
             } else {
-              obstacle1.style.right = current2 - 59 + 'vw';
-              const heightVariation = Math.floor(Math.random()*100) % 20;
-              obstacle1.style.top = -heightVariation + 'vh';
+              obstacle1Up.style.right = obstacle1UpPosition - 59 + 'vw';
+              obstacle1Up.style.top = -heightVariationObstacle1 + 'vh';
+              model.Obstacle1UpBottom = -11.5 -heightVariationObstacle1;
+
+              obstacle1Down.style.right = obstacle1UpPosition - 59 + 'vw';
+              obstacle1Down.style.top = -heightVariationObstacle1 + 'vh';
+              model.Obstacle1DownTop = 3.5 -heightVariationObstacle1;
             }
-            if (current2 < 78) {
-              obstacle2.style.right = current2 + 0.1 + 'vw';
+
+            const heightVariationObstacle2 = Math.floor(Math.random()*100) % 20;
+
+            if (obstacle2UpPosition < model.obstacle2ScreenleavingPoint) {
+              obstacle2Up.style.right = obstacle2UpPosition + 0.111 + 'vw';
+              obstacle2Down.style.right = obstacle2UpPosition + 0.111 + 'vw';
             } else {
-              obstacle2.style.right = current2 - 60 + 'vw';
-              const heightVariation = Math.floor(Math.random()*100) % 20;
-              obstacle2.style.top = -heightVariation + 'vh';
+              obstacle2Up.style.right = obstacle2UpPosition - 60 + 'vw';
+              obstacle2Up.style.top = -heightVariationObstacle2 + 'vh';
+              model.Obstacle2UpBottom = -11.5 -heightVariationObstacle2;
+
+              obstacle2Down.style.right = obstacle2UpPosition - 60 + 'vw';
+              obstacle2Down.style.top = -heightVariationObstacle2 + 'vh';
+              model.Obstacle2DownTop = 3.5 -heightVariationObstacle2;
             }
           }
         },
         gravity: (): void => {
-          if (model.pause === false) {
+          if (model.pause === false && model.gravityPresent === true) {
             const currentElevation = Number(Hero.style.top.slice(0, -2));
-            console.log(currentElevation);
-            if (currentElevation <= 64 && currentElevation >= -30) {
-              model.velocity += 0.009;
-              Hero.style.top = currentElevation + model.velocity + 'vh';
-            }
-            if (currentElevation >= 64.1) {
-              hitgroundSound.play();
+            if (currentElevation <= model.Ground) {
+              model.dY += model.gravity;
+              Hero.style.top = currentElevation + model.dY + 'vh';
+            } else {
+              if (model.playSound === true) {
+                hitgroundSound.play();
+              }
+              model.gravityPresent = false;
               model.pause = true;
+              setTimeout(() => {
+                endView.init();
+              }, 1000);
             }
           }
         },
       };
-      document.body.onkeyup = function(e): void {
+      document.body.onkeyup = (e): void => {
         // Space bar
-        if (e.keyCode === 32) {
+        if (e.keyCode === 32 && model.playerMovement === true) {
           if (model.pause === false) {
             Hero.src = './assets/images/frame-1.png';
             setTimeout(() => {
-              jumpSound.play();
+              if (model.playSound === true) {
+                jumpSound.play();
+              }
               controller.jump();
             }, 100);
           }
         }
-        // P
-        if (e.keyCode === 80) {
-          if (model.pause === false) {
-            model.pause = true;
-            gameStatus.innerHTML = '<i class="fas fa-play"></i>';
-          } else {
-            model.pause = false;
-            gameStatus.innerHTML = '<i class="fas fa-pause"></i>';
-          }
-        }
       };
-      document.body.onmouseup = function(): void {
-        if (model.pause === false) {
+      document.body.onmouseup = (): void => {
+        if (model.pause === false && model.playerMovement === true) {
           Hero.src = './assets/images/frame-1.png';
           setTimeout(() => {
+            if (model.playSound === true) {
+              jumpSound.play();
+            }
             controller.jump();
           }, 100);
         }
