@@ -1,0 +1,10 @@
+pages:
+  script:
+      - uname -a
+  image: node:latest
+  stage: deploy
+  artifacts:
+    paths:
+      - public # art
+  only:
+    - master
