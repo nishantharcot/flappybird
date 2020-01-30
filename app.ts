@@ -3,6 +3,7 @@
     if (document.readyState === 'complete') {
       const Hero = document.getElementById(
           'player') as HTMLImageElement;
+      // Id's for obstacles, gamestatus
       const obstacle1Up = document.getElementById(
           'obstacle1Up') as HTMLImageElement;
       const obstacle1Down = document.getElementById(
@@ -11,11 +12,14 @@
           'obstacle2Up') as HTMLImageElement;
       const obstacle2Down = document.getElementById(
           'obstacle2Down') as HTMLImageElement;
+      const gameStatus = document.getElementsByClassName(
+          'gameStatus')[0] as HTMLParagraphElement;
       const gameScore = document.getElementsByClassName(
           'score')[0] as HTMLParagraphElement;
       gameScore.innerHTML = String(0);
       const getReady = document.getElementById('getReady') as HTMLDivElement;
       const arrows = document.getElementById('arrows') as HTMLDivElement;
+      // Caps for constants
       const jumpSound = new Audio('./assets/sounds/jump.wav');
       const scoreSound = new Audio('./assets/sounds/score.wav');
       const hitgroundSound = new Audio('./assets/sounds/hitGround.wav');
@@ -31,8 +35,8 @@
         dY: 0,
         pause: true,
         score: 0,
-        screenTop: -38,
-        Ground: 28,
+        screenTop: -68,
+        Ground: 10,
         birdJumpYaxis: 3,
         obstacle1Startingpoint: 26,
         obstacle1Endingpoint: 31.5,
@@ -42,10 +46,10 @@
         heroObstacle1Endingpoint: 26.6,
         heroObstacle2Startingpoint: 56.5,
         heroObstacle2Endingpoint: 56.65,
-        Obstacle1UpBottom: -11.5,
-        Obstacle1DownTop: 3.5,
-        Obstacle2UpBottom: -11.5,
-        Obstacle2DownTop: 3.5,
+        Obstacle1UpBottom: -36.5,
+        Obstacle1DownTop: -21.5,
+        Obstacle2UpBottom: -36.5,
+        Obstacle2DownTop: -21.5,
         obstacle1ScreenleavingPoint: 48,
         obstacle2ScreenleavingPoint: 78,
       };
@@ -132,6 +136,7 @@
         init: (): void => {
           startView.init();
           gameView.init();
+          // gameView.init();
           // computational waste
           setInterval(controller.oscillate, 200);
           setInterval(controller.move, 10);
@@ -154,6 +159,7 @@
         sideMovement: (): void => {
           if (model.pause === false) {
             const currentRight = Number(Hero.style.right.slice(0, -2));
+            // currentRight -= 0.01;
             Hero.style.right = currentRight - 0.001 + 'vw';
           }
         },
@@ -163,6 +169,17 @@
           model.playerMovement = false;
           setInterval(controller.sideMovement, 1);
           setInterval(controller.gravity, 1);
+          // model.pause = true;
+        },
+        pump: (): void => {
+          const currentElevation = Number(Hero.style.top.slice(0, -2));
+          Hero.src = './assets/images/frame-4.png';
+          model.dY += model.flapping;
+          if (currentElevation >= model.screenTop) {
+            Hero.style.top = Number(currentElevation) -
+              model.dY + 'vh';
+          }
+          model.dY = 0;
         },
         jump: (): void => {
           const currentElevation = Number(Hero.style.top.slice(0, -2));
@@ -178,22 +195,60 @@
           if (model.pause === false && model.obstacleMovement === true) {
             const obstacle1UpPosition =
               Number(obstacle1Up.style.right.slice(0, -2));
+            const obstacle1DownPosition = obstacle1UpPosition;
             const obstacle2UpPosition =
               Number(obstacle2Up.style.right.slice(0, -2));
-
+            const obstacle2DownPosition = obstacle2UpPosition;
             const currentElevation = Number(Hero.style.top.slice(0, -2));
+            // console.log('Hero top position:', currentElevation);
             if (obstacle1UpPosition >= model.obstacle1Startingpoint &&
                 obstacle1UpPosition <= model.obstacle1Endingpoint) {
-              if (currentElevation >= model.Obstacle1DownTop ||
-                currentElevation <= model.Obstacle1UpBottom) {
-                controller.obstacleCollision();
+              if (model.score === 1) {
+                if (currentElevation >= model.Obstacle1DownTop ||
+                  currentElevation <= model.Obstacle1UpBottom) {
+                  console.log('Hero top position in move:', currentElevation);
+                  console.log('Obstacle1DownTop:', model.Obstacle1DownTop);
+                  console.log('Obstacle1UpBottom:', model.Obstacle1UpBottom);
+                  controller.obstacleCollision();
+                  // model.pause = true;
+                  console.log('Collision due to obstacle1');
+                }
+              }
+              if (model.score >= 3) {
+                if (-25 + currentElevation >= model.Obstacle1DownTop ||
+                  -25 + currentElevation <= model.Obstacle1UpBottom) {
+                  console.log('Hero top position in move:', currentElevation);
+                  console.log('Obstacle1DownTop:', model.Obstacle1DownTop);
+                  console.log('Obstacle1UpBottom:', model.Obstacle1UpBottom);
+                  controller.obstacleCollision();
+                  // model.pause = true;
+                  console.log('Collision due to obstacle1');
+                }
               }
             }
             if (obstacle2UpPosition >= model.obstacle2Startingpoint &&
               obstacle2UpPosition <= model.obstacle2Endingpoint) {
-              if (currentElevation >= model.Obstacle2DownTop ||
-                currentElevation <= model.Obstacle2UpBottom) {
-                controller.obstacleCollision();
+              if (model.score === 2) {
+                if (currentElevation >= model.Obstacle2DownTop ||
+                  currentElevation <= model.Obstacle2UpBottom) {
+                  console.log('Hero top position in move:', currentElevation);
+                  console.log('Obstacle2DownTop:', model.Obstacle2DownTop);
+                  console.log('Obstacle2UpBottom:', model.Obstacle2UpBottom);
+                  // model.pause = true;
+                  controller.obstacleCollision();
+                  console.log('Collision due to obstacle2');
+                }
+              }
+              if (model.score >= 3) {
+                if (-25 + currentElevation >= model.Obstacle2DownTop ||
+                  -25 + currentElevation <= model.Obstacle2UpBottom) {
+                  console.log('Hero top position in move:', currentElevation);
+                  console.log('Obstacle2DownTop:', model.Obstacle2DownTop);
+                  console.log('Obstacle2UpBottom:', model.Obstacle2UpBottom);
+                  // model.pause = true;
+                  controller.obstacleCollision();
+                  console.log('Collision due to obstacle2');
+                }
               }
             }
             if (obstacle1UpPosition >= model.heroObstacle1Startingpoint &&
@@ -212,33 +267,33 @@
                 scoreSound.play();
               }
             }
-            const heightVariationObstacle1 = Math.floor(Math.random()*100) % 20;
+            const heightVariationObstacle1 = Math.floor(Math.random()*100) % 10;
             if (obstacle1UpPosition < model.obstacle1ScreenleavingPoint) {
               obstacle1Up.style.right = obstacle1UpPosition + 0.111 + 'vw';
               obstacle1Down.style.right = obstacle1UpPosition + 0.111 + 'vw';
             } else {
               obstacle1Up.style.right = obstacle1UpPosition - 59 + 'vw';
-              obstacle1Up.style.top = -heightVariationObstacle1 + 'vh';
-              model.Obstacle1UpBottom = -11.5 -heightVariationObstacle1;
+              obstacle1Up.style.top = -25 -heightVariationObstacle1 + 'vh';
+              model.Obstacle1UpBottom = -36.5 -25 -heightVariationObstacle1;
 
               obstacle1Down.style.right = obstacle1UpPosition - 59 + 'vw';
-              obstacle1Down.style.top = -heightVariationObstacle1 + 'vh';
-              model.Obstacle1DownTop = 3.5 -heightVariationObstacle1;
+              obstacle1Down.style.top = -25 -heightVariationObstacle1 + 'vh';
+              model.Obstacle1DownTop = -21.5 -25 -heightVariationObstacle1;
             }
 
-            const heightVariationObstacle2 = Math.floor(Math.random()*100) % 20;
+            const heightVariationObstacle2 = Math.floor(Math.random()*100) % 10;
 
             if (obstacle2UpPosition < model.obstacle2ScreenleavingPoint) {
               obstacle2Up.style.right = obstacle2UpPosition + 0.111 + 'vw';
               obstacle2Down.style.right = obstacle2UpPosition + 0.111 + 'vw';
             } else {
               obstacle2Up.style.right = obstacle2UpPosition - 60 + 'vw';
-              obstacle2Up.style.top = -heightVariationObstacle2 + 'vh';
-              model.Obstacle2UpBottom = -11.5 -heightVariationObstacle2;
+              obstacle2Up.style.top = -25 -heightVariationObstacle2 + 'vh';
+              model.Obstacle2UpBottom = -36.5 -25 - heightVariationObstacle2;
 
               obstacle2Down.style.right = obstacle2UpPosition - 60 + 'vw';
-              obstacle2Down.style.top = -heightVariationObstacle2 + 'vh';
-              model.Obstacle2DownTop = 3.5 -heightVariationObstacle2;
+              obstacle2Down.style.top = -25 -heightVariationObstacle2 + 'vh';
+              model.Obstacle2DownTop = -21.5 -25 -heightVariationObstacle2;
             }
           }
         },
@@ -274,14 +329,104 @@
             }, 100);
           }
         }
+
+        // Z
+        if (e.keyCode === 90) {
+          if (model.pause === false) {
+            Hero.src = './assets/images/frame-1.png';
+            setTimeout(() => {
+              if (model.playSound === true) {
+                jumpSound.play();
+              }
+              controller.pump();
+            }, 100);
+          }
+        }
+
+        // left key
+        if (e.keyCode === 37) {
+          const obstacle1UpPosition =
+            Number(obstacle1Up.style.right.slice(0, -2));
+          const obstacle1DownPosition = obstacle1UpPosition;
+          const obstacle2UpPosition =
+            Number(obstacle2Up.style.right.slice(0, -2));
+          const obstacle2DownPosition = obstacle2UpPosition;
+
+          const heightVariationObstacle1 = Math.floor(Math.random()*100) % 20;
+          if (obstacle1UpPosition < model.obstacle1ScreenleavingPoint) {
+            obstacle1Up.style.right = obstacle1UpPosition + 1 + 'vw';
+          } else {
+            obstacle1Up.style.right = obstacle2UpPosition - 59 + 'vw';
+            obstacle1Up.style.top = -heightVariationObstacle1 + 'vh';
+          }
+
+          if (obstacle1DownPosition < model.obstacle1ScreenleavingPoint) {
+            obstacle1Down.style.right = obstacle1UpPosition + 1 + 'vw';
+          } else {
+            obstacle1Down.style.right = obstacle2UpPosition - 59 + 'vw';
+            obstacle1Down.style.top = -heightVariationObstacle1 + 'vh';
+          }
+          const heightVariationObstacle2 = Math.floor(Math.random()*100) % 20;
+
+          if (obstacle2UpPosition < model.obstacle2ScreenleavingPoint) {
+            obstacle2Up.style.right = obstacle2UpPosition + 1 + 'vw';
+          } else {
+            obstacle2Up.style.right = obstacle2UpPosition - 60 + 'vw';
+            obstacle2Up.style.top = -heightVariationObstacle2 + 'vh';
+          }
+
+          if (obstacle2DownPosition < model.obstacle2ScreenleavingPoint) {
+            obstacle2Down.style.right = obstacle2UpPosition + 1 + 'vw';
+          } else {
+            obstacle2Down.style.right = obstacle2UpPosition - 60 + 'vw';
+            obstacle2Down.style.top = -heightVariationObstacle2 + 'vh';
+          }
+          const currentElevation = Number(Hero.style.top.slice(0, -2));
+        }
+        // right key
+        if (e.keyCode === 39) {
+          const obstacle1UpPosition =
+            Number(obstacle1Up.style.right.slice(0, -2));
+          const obstacle1DownPosition = obstacle1UpPosition;
+          const obstacle2UpPosition =
+            Number(obstacle2Up.style.right.slice(0, -2));
+          const obstacle2DownPosition = obstacle2UpPosition;
+          const heightVariationObstacle1 = Math.floor(Math.random()*100) % 20;
+          if (obstacle1UpPosition < model.obstacle1ScreenleavingPoint) {
+            obstacle1Up.style.right = obstacle1UpPosition - 1 + 'vw';
+          } else {
+            obstacle1Up.style.right = obstacle2UpPosition - 59 + 'vw';
+            obstacle1Up.style.top = -heightVariationObstacle1 + 'vh';
+          }
+
+          if (obstacle1DownPosition < model.obstacle1ScreenleavingPoint) {
+            obstacle1Down.style.right = obstacle1UpPosition - 1 + 'vw';
+          } else {
+            obstacle1Down.style.right = obstacle2UpPosition - 59 + 'vw';
+            obstacle1Down.style.top = -heightVariationObstacle1 + 'vh';
+          }
+          const heightVariationObstacle2 = Math.floor(Math.random()*100) % 20;
+
+          if (obstacle2UpPosition < model.obstacle2ScreenleavingPoint) {
+            obstacle2Up.style.right = obstacle2UpPosition - 1 + 'vw';
+          } else {
+            obstacle2Up.style.right = obstacle2UpPosition - 60 + 'vw';
+            obstacle2Up.style.top = -heightVariationObstacle2 + 'vh';
+          }
+
+          if (obstacle2DownPosition < model.obstacle2ScreenleavingPoint) {
+            obstacle2Down.style.right = obstacle2UpPosition - 1 + 'vw';
+          } else {
+            obstacle2Down.style.right = obstacle2UpPosition - 60 + 'vw';
+            obstacle2Down.style.top = -heightVariationObstacle2 + 'vh';
+          }
+          const currentElevation = Number(Hero.style.top.slice(0, -2));
+        }
       };
       document.body.onmouseup = (): void => {
         if (model.pause === false && model.playerMovement === true) {
           Hero.src = './assets/images/frame-1.png';
           setTimeout(() => {
-            if (model.playSound === true) {
-              jumpSound.play();
-            }
             controller.jump();
           }, 100);
         }
