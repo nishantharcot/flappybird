@@ -1,6 +1,13 @@
 pages:
+  before_script:
+      - npm install
+      - npm install -g typescript
   script:
-      - uname -a
+      - mkdir .public
+      - cp -r * .public
+      - mv .public public
+      - tsc app.ts
+      - mv app.js public
   image: node:latest
   stage: deploy
   artifacts:
